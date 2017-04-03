@@ -4,6 +4,8 @@ NAME=$(lua script/get_title.lua)
 GAME="$NAME.love"
 ROOTDIR=$(pwd)
 
+./script/download.sh $TARGET
+
 if ! [ -f $ROOTDIR/$GAME ]; then
     echo "Game not found in $GAME - please run \"make build\" first."
     exit 1
@@ -23,7 +25,7 @@ if [ $TARGET != "linux" ]; then
 fi
 
 if [ $TARGET = "linux" ]; then
-	cp $ROOTDIR/$GAME $PKGDIR 
+	cp $ROOTDIR/$GAME $PKGDIR
 elif [ $TARGET = "windows" ]; then
 	cd $PKGDIR
 	cat $LIBDIR/love.exe $ROOTDIR/$GAME > $NAME.exe

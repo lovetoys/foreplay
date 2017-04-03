@@ -14,17 +14,7 @@ clean:
 	rm -rf temp
 
 build: buildclean
-	@zip -q -r -0 $(project_name).love assets/*
-	@cd src/ && zip -q -r ../$(project_name).love *
-
-build-fast:
-	@zip -q -r -0 $(project_name).love assets/*
-	@./script/fast.sh
-	@cd temp/ && zip -q -r ../$(project_name).love *
-	@rm -rf temp
-
-fast: build-fast
-	@love $(project_name).love
+	@./script/build.sh $(project_name)
 
 run:
 	@love $(project_name).love
@@ -33,15 +23,12 @@ setup:
 	git submodule update --init --recursive
 
 package-linux: build
-	@./script/download.sh linux
 	@./script/package.sh linux
 
 package-windows: build
-	@./script/download.sh windows
 	@./script/package.sh windows
 
 package-mac: build
-	@./script/download.sh osx
 	@./script/package.sh osx
 
 subupdate:
