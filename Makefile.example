@@ -5,10 +5,10 @@ foreplay_dir = "./foreplay"
 default: build run
 
 buildclean:
-	rm -f $(project_name).love
+	rm -f $(foreplay_dir)/pkg/*.love
 
 clean:
-	rm -f $(project_name).love
+	rm -f $(foreplay_dir)/pkg/*.love
 	rm -rf $(foreplay_dir)/pkg
 	rm -rf $(foreplay_dir)/lib
 
@@ -16,7 +16,7 @@ build: buildclean
 	@$(foreplay_dir)/build.sh
 
 run:
-	@love $(project_name).love
+	@love $(foreplay_dir)/pkg/*.love
 
 setup:
 	git submodule update --init --recursive

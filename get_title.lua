@@ -1,5 +1,5 @@
 love = {}
-require "src/conf"
+require "conf"
 conf = {}
 conf.modules = {}
 conf.window = {}
