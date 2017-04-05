@@ -1,6 +1,6 @@
-.PHONY: default clean build run lib getwindowlib getmaclib package-linux package-windows package-mac package
+.PHONY: default clean build run lib package-linux package-windows package-osx package
 
-project_name = name
+foreplay_dir = "./foreplay"
 
 default: build run
 
@@ -9,12 +9,11 @@ buildclean:
 
 clean:
 	rm -f $(project_name).love
-	rm -rf pkg
-	rm -rf lib
-	rm -rf temp
+	rm -rf $(foreplay_dir)/pkg
+	rm -rf $(foreplay_dir)/lib
 
 build: buildclean
-	@./script/build.sh $(project_name)
+	@$(foreplay_dir)/build.sh
 
 run:
 	@love $(project_name).love
@@ -23,15 +22,15 @@ setup:
 	git submodule update --init --recursive
 
 package-linux: build
-	@./script/package.sh linux
+	@$(foreplay_dir)/package.sh linux
 
 package-windows: build
-	@./script/package.sh windows
+	@$(foreplay_dir)/package.sh windows
 
-package-mac: build
-	@./script/package.sh osx
+package-osx: build
+	@$(foreplay_dir)/package.sh osx
 
 subupdate:
 	git submodule foreach git pull origin master
 
-package: build package-linux package-windows package-mac
+package: build package-linux package-windows package-osx

@@ -1,13 +1,13 @@
 #!/bin/bash
 TARGET=$1
-NAME=$(lua script/get_title.lua)
-GAME="$NAME.love"
-ROOTDIR=$(pwd)
+ROOTDIR=$(dirname $0)
+NAME=$(lua $ROOTDIR/get_title.lua)
+LOVEFILE="$ROOTDIR/pkg/$NAME.love"
 
-./script/download.sh $TARGET
+"$(dirname $0)/download.sh" $TARGET
 
-if ! [ -f $ROOTDIR/$GAME ]; then
-    echo "Game not found in $GAME - please run \"make build\" first."
+if ! [ -f $LOVEFILE ]; then
+    echo "Game not found in $LOVEFILE - please run \"make build\" first."
     exit 1
 fi
 
@@ -25,13 +25,16 @@ if [ $TARGET != "linux" ]; then
 fi
 
 if [ $TARGET = "linux" ]; then
-	cp $ROOTDIR/$GAME $PKGDIR
+	cp $LOVEFILE $PKGDIR
 elif [ $TARGET = "windows" ]; then
 	cd $PKGDIR
-	cat $LIBDIR/love.exe $ROOTDIR/$GAME > $NAME.exe
+	cat $LIBDIR/love.exe $LOVEFILE > $NAME.exe
+	zip -r "../${NAME}_${TARGET}.zip" "./"
 elif [ $TARGET = "osx" ]; then
 	mv $PKGDIR/love.app $PKGDIR/$NAME.app
-	cp $ROOTDIR/$GAME $PKGDIR/$NAME.app/Contents/Resources/$GAME
+	cp $LOVEFILE $PKGDIR/$NAME.app/Contents/Resources/$NAME.love
+	cd $PKGDIR
+	zip -r "../${NAME}_${TARGET}.zip" "./"
 else
 	echo "ERROR: Unknown target: $TARGET"
 	exit 1

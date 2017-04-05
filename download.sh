@@ -1,10 +1,6 @@
 #!/bin/bash
 TARGET=$1
-ROOTDIR=$(pwd)
-
-if ! [ -d $ROOTDIR/lib ]; then
-    mkdir lib
-fi
+ROOTDIR="$(dirname $0)"
 
 echo -n "Downloading Libs for $TARGET... "
 echo ""
@@ -12,13 +8,14 @@ echo ""
 TEMPDIR=$ROOTDIR/temp/$TARGET
 LIBDIR=$ROOTDIR/lib/$TARGET
 
-mkdir -p $ROOTDIR/temp
+mkdir -p $TEMPDIR
+mkdir -p $LIBDIR
 mkdir -p $LIBDIR
 
 if [ $TARGET = "windows" ]; then
     if [ `ls -A $LIBDIR | wc -w` == 0 ]; then
-        wget -q https://bitbucket.org/rude/love/downloads/love-0.10.2-win64.zip -O temp/windows.zip
-        unzip -q $ROOTDIR/temp/$TARGET -d $LIBDIR/
+        wget -q https://bitbucket.org/rude/love/downloads/love-0.10.2-win64.zip -O $ROOTDIR/temp/windows.zip
+        unzip -q $TEMPDIR -d $LIBDIR/
         SUBDIR=$(ls $LIBDIR)
         mv $LIBDIR/$SUBDIR/* $LIBDIR/
         rm -r $LIBDIR/$SUBDIR
@@ -29,8 +26,8 @@ if [ $TARGET = "windows" ]; then
     fi
 elif [ $TARGET = "osx" ]; then
     if [ `ls -A $LIBDIR | wc -w` == 0 ]; then
-        wget -q https://bitbucket.org/rude/love/downloads/love-0.10.2-macosx-x64.zip -O temp/osx.zip
-        unzip -q $ROOTDIR/temp/$TARGET -d $LIBDIR/
+        wget -q https://bitbucket.org/rude/love/downloads/love-0.10.2-macosx-x64.zip -O $ROOTDIR/temp/osx.zip
+        unzip -q $TEMPDIR -d $LIBDIR/
         rm -rf $LIBDIR/__MACOSX
     else
         echo "No download needed, already existing"
